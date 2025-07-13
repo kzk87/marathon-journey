@@ -24,6 +24,9 @@ class SecurityManager {
      * @returns {string} - 動的生成された秘密鍵
      */
     generateSecretKey() {
+        // マスターキー: サイト所有者のみが知る固定値
+        const MASTER_KEY = 'marathon_owner_2025_dec21_secure_key_xyz789';
+        
         // ブラウザ固有の情報から秘密鍵を生成
         const browserInfo = {
             userAgent: navigator.userAgent,
@@ -37,11 +40,50 @@ class SecurityManager {
         // 既存の秘密鍵があれば使用、なければ新規生成
         let secretKey = localStorage.getItem('marathonSecretKey');
         if (!secretKey) {
-            secretKey = btoa(JSON.stringify(browserInfo) + Math.random().toString(36));
+            secretKey = btoa(JSON.stringify(browserInfo) + Math.random().toString(36) + MASTER_KEY);
             localStorage.setItem('marathonSecretKey', secretKey);
         }
         
         return secretKey;
+    }
+
+    /**
+     * マスター管理者の初期設定確認
+     * @returns {boolean} - 初期設定済みかどうか
+     */
+    isMasterAdminSetup() {
+        const masterFlag = localStorage.getItem('marathonMasterAdmin');
+        return masterFlag === 'initialized';
+    }
+
+    /**
+     * マスター管理者として初期設定
+     */
+    initializeMasterAdmin() {
+        localStorage.setItem('marathonMasterAdmin', 'initialized');
+        localStorage.setItem('marathonAdminInitTime', Date.now().toString());
+    }
+
+    /**
+     * 管理者アクセス権限の検証
+     */
+    validateAdminAccess() {
+        // マスター管理者が未設定の場合は設定を許可
+        if (!this.isMasterAdminSetup()) {
+            return { allowed: true, reason: 'initial_setup' };
+        }
+        
+        // 既に設定済みの場合は、このブラウザが初期設定者かチェック
+        const initTime = localStorage.getItem('marathonAdminInitTime');
+        const currentTime = Date.now();
+        const timeDiff = currentTime - (initTime ? parseInt(initTime) : 0);
+        
+        // 初期設定から24時間以内でない場合はアクセス拒否
+        if (timeDiff > 24 * 60 * 60 * 1000) {
+            return { allowed: false, reason: 'unauthorized_access' };
+        }
+        
+        return { allowed: true, reason: 'authorized' };
     }
 
     /**
