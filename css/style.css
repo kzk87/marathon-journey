@@ -353,6 +353,23 @@ body {
     color: var(--secondary-color);
 }
 
+.delete-activity-btn {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    opacity: 0.6;
+}
+
+.delete-activity-btn:hover {
+    opacity: 1;
+    background-color: rgba(231, 76, 60, 0.1);
+    transform: scale(1.1);
+}
+
 .empty-state {
     text-align: center;
     padding: 3rem;

@@ -36,6 +36,13 @@ class MarathonTracker {
     setupEventListeners() {
         const form = document.getElementById('activityForm');
         form.addEventListener('submit', (e) => this.handleSubmit(e));
+        
+        // 活動記録削除ボタンのイベントリスナー
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('delete-activity-btn')) {
+                this.deleteActivity(e.target);
+            }
+        });
     }
 
     /**
@@ -145,7 +152,7 @@ class MarathonTracker {
         const pace = activity.distance > 0 && activity.duration ? this.calculatePace(activity.distance, activity.duration) : null;
 
         return `
-            <div class="activity-item">
+            <div class="activity-item" data-id="${activity.id}">
                 <div class="activity-date">${formattedDate}</div>
                 <div class="activity-info">
                     <div class="activity-type">${typeLabel}</div>
@@ -156,6 +163,7 @@ class MarathonTracker {
                     </div>
                 </div>
                 <div class="activity-distance">${activity.distance}km</div>
+                <button class="delete-activity-btn" data-id="${activity.id}" title="削除">🗑️</button>
             </div>
         `;
     }
@@ -245,6 +253,40 @@ class MarathonTracker {
         }
         
         return totalMinutes / distance;
+    }
+
+    /**
+     * =====================================================
+     * 活動記録削除機能
+     * =====================================================
+     */
+    
+    /**
+     * 活動記録を削除
+     * @param {HTMLElement} button - 削除ボタン要素
+     */
+    deleteActivity(button) {
+        const activityId = parseInt(button.dataset.id);
+        const activity = this.activities.find(a => a.id === activityId);
+        
+        if (!activity) return;
+        
+        // 確認ダイアログ
+        const activityDate = this.formatDate(activity.date);
+        const confirmMessage = `${activityDate}の活動記録「${activity.distance}km」を削除しますか？`;
+        
+        if (!confirm(confirmMessage)) return;
+        
+        // 配列から削除
+        this.activities = this.activities.filter(a => a.id !== activityId);
+        
+        // 保存・表示更新
+        this.saveActivities();
+        this.displayActivities();
+        this.updateStats();
+        
+        // 成功メッセージ
+        alert('活動記録を削除しました。');
     }
 }
 
