@@ -1,12 +1,27 @@
 class ArticlesManager {
     constructor() {
-        this.articles = JSON.parse(localStorage.getItem('marathonArticles')) || [];
+        this.articles = [];
         this.init();
     }
 
-    init() {
+    async init() {
+        await this.loadArticles();
         this.displayArticles();
         this.setupEventListeners();
+    }
+
+    async loadArticles() {
+        try {
+            const response = await fetch('data/articles.json');
+            if (response.ok) {
+                this.articles = await response.json();
+            } else {
+                this.articles = [];
+            }
+        } catch (error) {
+            console.warn('記事データの読み込みに失敗しました:', error);
+            this.articles = [];
+        }
     }
 
     setupEventListeners() {

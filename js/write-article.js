@@ -63,13 +63,34 @@ class ArticleWriter {
         this.saveArticle(formData);
     }
 
-    saveArticle(article) {
-        let articles = JSON.parse(localStorage.getItem('marathonArticles')) || [];
-        articles.unshift(article);
-        localStorage.setItem('marathonArticles', JSON.stringify(articles));
-        
-        alert('記事が投稿されました！');
-        window.location.href = 'articles.html';
+    async saveArticle(article) {
+        try {
+            const response = await fetch('data/articles.json');
+            let articles = [];
+            if (response.ok) {
+                articles = await response.json();
+            }
+            
+            articles.unshift(article);
+            
+            const blob = new Blob([JSON.stringify(articles, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'articles.json';
+            a.style.display = 'none';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            alert('記事が投稿されました！\nダウンロードされたarticles.jsonファイルをdata/フォルダに上書きして、GitHubにコミットしてください。');
+            
+        } catch (error) {
+            console.error('記事の保存に失敗しました:', error);
+            alert('記事の保存に失敗しました。もう一度お試しください。');
+        }
     }
 
     /**
