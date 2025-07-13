@@ -14,8 +14,34 @@ class SecurityManager {
      * コンストラクタ - セキュリティ設定の初期化
      */
     constructor() {
-        this.secretKey = 'marathon2025secure';
+        // 動的に生成される秘密鍵（ブラウザごとに異なる）
+        this.secretKey = this.generateSecretKey();
         this.sessionDuration = 2 * 60 * 60 * 1000; // 2時間
+    }
+
+    /**
+     * ブラウザ固有の秘密鍵を生成
+     * @returns {string} - 動的生成された秘密鍵
+     */
+    generateSecretKey() {
+        // ブラウザ固有の情報から秘密鍵を生成
+        const browserInfo = {
+            userAgent: navigator.userAgent,
+            language: navigator.language,
+            platform: navigator.platform,
+            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+            screen: `${screen.width}x${screen.height}`,
+            timestamp: Date.now()
+        };
+        
+        // 既存の秘密鍵があれば使用、なければ新規生成
+        let secretKey = localStorage.getItem('marathonSecretKey');
+        if (!secretKey) {
+            secretKey = btoa(JSON.stringify(browserInfo) + Math.random().toString(36));
+            localStorage.setItem('marathonSecretKey', secretKey);
+        }
+        
+        return secretKey;
     }
 
     /**

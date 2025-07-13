@@ -126,10 +126,39 @@ class ArticlesManager {
         return date.toLocaleDateString('ja-JP', options);
     }
 
+    /**
+     * XSS攻撃防止のためのHTML エスケープ
+     * @param {string} text - エスケープするテキスト
+     * @returns {string} - エスケープされたHTML安全なテキスト
+     */
     escapeHtml(text) {
+        if (typeof text !== 'string') return '';
+        
         const div = document.createElement('div');
         div.textContent = text;
         return div.innerHTML;
+    }
+
+    /**
+     * 入力値の妥当性検証
+     * @param {string} input - 検証する入力値
+     * @returns {boolean} - 妥当性
+     */
+    validateInput(input) {
+        if (typeof input !== 'string') return false;
+        if (input.length > 10000) return false; // 長すぎる入力を拒否
+        
+        // 危険なスクリプトタグなどを検出
+        const dangerousPatterns = [
+            /<script[\s\S]*?>[\s\S]*?<\/script>/gi,
+            /javascript:/gi,
+            /on\w+\s*=/gi,
+            /<iframe/gi,
+            /<embed/gi,
+            /<object/gi
+        ];
+        
+        return !dangerousPatterns.some(pattern => pattern.test(input));
     }
 
     // いいね機能

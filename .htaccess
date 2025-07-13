@@ -1,0 +1,36 @@
+# セキュリティヘッダー
+<IfModule mod_headers.c>
+    # XSS攻撃防止
+    Header always set X-XSS-Protection "1; mode=block"
+    
+    # コンテンツタイプスニッフィング防止
+    Header always set X-Content-Type-Options "nosniff"
+    
+    # クリックジャッキング攻撃防止
+    Header always set X-Frame-Options "DENY"
+    
+    # リファラーポリシー
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    
+    # コンテンツセキュリティポリシー
+    Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' fonts.googleapis.com; font-src 'self' fonts.gstatic.com; img-src 'self' data:; connect-src 'self'"
+</IfModule>
+
+# ファイルアクセス制限
+<Files ".git*">
+    Order allow,deny
+    Deny from all
+</Files>
+
+<Files "*.md">
+    Order allow,deny
+    Deny from all
+</Files>
+
+# キャッシュ制御
+<IfModule mod_expires.c>
+    ExpiresActive on
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+    ExpiresByType text/html "access plus 1 hour"
+</IfModule>
