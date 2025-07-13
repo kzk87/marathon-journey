@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>記事投稿 - Marathon Journey</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <h1 class="site-title">🏃‍♂️ Marathon Journey</h1>
+            <p class="site-subtitle">フルマラソン完走への道のり</p>
+        </div>
+    </header>
+
+    <nav class="navigation">
+        <div class="container">
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">🏠 ホーム</a>
+                </li>
+                <li class="nav-item">
+                    <a href="articles.html" class="nav-link">📝 記事</a>
+                </li>
+                <li class="nav-item">
+                    <a href="write-article.html" class="nav-link active">✏️ 記事投稿</a>
+                </li>
+                <li class="nav-item">
+                    <a href="admin.html" class="nav-link">⚙️ 管理</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="main">
+        <div class="container">
+            <section class="write-article-section">
+                <h2 class="section-title">新しい記事を投稿</h2>
+                
+                <div class="article-form-card">
+                    <form id="articleForm" class="article-form">
+                        <div class="form-group">
+                            <label for="articleTitle">タイトル</label>
+                            <input type="text" id="articleTitle" required placeholder="記事のタイトルを入力してください">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="articleCategory">カテゴリー</label>
+                            <select id="articleCategory" required>
+                                <option value="">選択してください</option>
+                                <option value="training">トレーニング</option>
+                                <option value="nutrition">栄養・食事</option>
+                                <option value="gear">ギア・用品</option>
+                                <option value="mindset">メンタル</option>
+                                <option value="race">レース</option>
+                                <option value="recovery">回復・ケア</option>
+                                <option value="other">その他</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="articleContent">内容</label>
+                            <textarea id="articleContent" rows="15" required placeholder="記事の内容を書いてください..."></textarea>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="button" class="cancel-btn" onclick="history.back()">キャンセル</button>
+                            <button type="submit" class="submit-btn">記事を投稿</button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Marathon Journey. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/security.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/write-article.js"></script>
+</body>
+</html>

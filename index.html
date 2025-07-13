@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>フルマラソン完走への道 - 2025.12.21</title>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- =====================================================
+         ヘッダーセクション - サイトタイトルとサブタイトル
+         ===================================================== -->
+    <header class="header">
+        <div class="container">
+            <h1 class="site-title">🏃‍♂️ Marathon Journey</h1>
+            <p class="site-subtitle">フルマラソン完走への道のり</p>
+        </div>
+    </header>
+
+    <!-- =====================================================
+         ナビゲーションメニュー - ページ間移動
+         ===================================================== -->
+    <nav class="navigation">
+        <div class="container">
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link active">🏠 ホーム</a>
+                </li>
+                <li class="nav-item">
+                    <a href="articles.html" class="nav-link">📝 記事</a>
+                </li>
+                <li class="nav-item">
+                    <a href="write-article.html" class="nav-link">✏️ 記事投稿</a>
+                </li>
+                <li class="nav-item">
+                    <a href="admin.html" class="nav-link">⚙️ 管理</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- =====================================================
+         メインコンテンツエリア
+         ===================================================== -->
+    <main class="main">
+        <div class="container">
+            <!-- =====================================================
+                 カウントダウンセクション - 本番まで残り時間表示
+                 ===================================================== -->
+            <section class="countdown-section">
+                <div class="countdown-card">
+                    <h2 class="countdown-title">本番まで</h2>
+                    <div class="countdown-display">
+                        <div class="countdown-item">
+                            <span class="countdown-number" id="days">0</span>
+                            <span class="countdown-label">日</span>
+                        </div>
+                        <div class="countdown-item">
+                            <span class="countdown-number" id="hours">0</span>
+                            <span class="countdown-label">時間</span>
+                        </div>
+                        <div class="countdown-item">
+                            <span class="countdown-number" id="minutes">0</span>
+                            <span class="countdown-label">分</span>
+                        </div>
+                        <div class="countdown-item">
+                            <span class="countdown-number" id="seconds">0</span>
+                            <span class="countdown-label">秒</span>
+                        </div>
+                    </div>
+                    <p class="race-date">🎯 2025年12月21日</p>
+                </div>
+            </section>
+
+            <!-- =====================================================
+                 統計情報セクション - 走行記録の自動集計表示
+                 ===================================================== -->
+            <section class="stats-section">
+                <h2 class="section-title">走行記録</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">📊</div>
+                        <div class="stat-content">
+                            <h3 class="stat-title">今月の距離</h3>
+                            <p class="stat-value" id="monthlyDistance">0 km</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🏃</div>
+                        <div class="stat-content">
+                            <h3 class="stat-title">通算距離</h3>
+                            <p class="stat-value" id="totalDistance">0 km</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">📈</div>
+                        <div class="stat-content">
+                            <h3 class="stat-title">今月回数</h3>
+                            <p class="stat-value" id="monthlyRuns">0 回</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🎯</div>
+                        <div class="stat-content">
+                            <h3 class="stat-title">平均ペース</h3>
+                            <p class="stat-value" id="averagePace">0:00/km</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- =====================================================
+                 活動記録入力セクション - 日々のトレーニング記録
+                 ===================================================== -->
+            <section class="activity-section">
+                <h2 class="section-title">今日の活動記録</h2>
+                <div class="activity-form-card">
+                    <form id="activityForm" class="activity-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="activityDate">日付</label>
+                                <input type="date" id="activityDate" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="distance">距離 (km)</label>
+                                <input type="number" id="distance" step="0.1" min="0" placeholder="5.0">
+                            </div>
+                            <div class="form-group">
+                                <label for="duration">時間</label>
+                                <input type="text" id="duration" placeholder="30:00" pattern="[0-9]{1,2}:[0-9]{2}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="activityType">トレーニング内容</label>
+                            <select id="activityType" required>
+                                <option value="">選択してください</option>
+                                <option value="easy-run">イージーラン</option>
+                                <option value="long-run">ロングラン</option>
+                                <option value="interval">インターバル</option>
+                                <option value="tempo">テンポラン</option>
+                                <option value="recovery">リカバリーラン</option>
+                                <option value="other">その他</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="notes">メモ</label>
+                            <textarea id="notes" rows="3" placeholder="今日の調子や気づいたことなど..."></textarea>
+                        </div>
+                        <button type="submit" class="submit-btn">記録を追加</button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- =====================================================
+                 最近の活動一覧 - 過去の記録表示
+                 ===================================================== -->
+            <section class="recent-activities-section">
+                <h2 class="section-title">最近の活動</h2>
+                <div id="activitiesList" class="activities-list">
+                    <!-- アクティビティがここに表示されます -->
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- =====================================================
+         フッター
+         ===================================================== -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Marathon Journey. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- =====================================================
+         JavaScript - メイン機能
+         ===================================================== -->
+    <script src="js/app.js"></script>
+</body>
+</html>

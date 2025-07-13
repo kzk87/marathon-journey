@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管理者設定 - Marathon Journey</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <h1 class="site-title">🏃‍♂️ Marathon Journey</h1>
+            <p class="site-subtitle">管理者設定</p>
+        </div>
+    </header>
+
+    <nav class="navigation">
+        <div class="container">
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">🏠 ホーム</a>
+                </li>
+                <li class="nav-item">
+                    <a href="articles.html" class="nav-link">📝 記事</a>
+                </li>
+                <li class="nav-item">
+                    <a href="write-article.html" class="nav-link">✏️ 記事投稿</a>
+                </li>
+                <li class="nav-item">
+                    <a href="admin.html" class="nav-link active">⚙️ 管理</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="main">
+        <div class="container">
+            <section class="admin-section">
+                <h2 class="section-title">管理者設定</h2>
+                
+                <div class="admin-card">
+                    <h3>パスワード設定</h3>
+                    <p class="admin-description">記事投稿と管理機能を保護するためのパスワードを設定してください。</p>
+                    
+                    <form id="passwordForm" class="password-form">
+                        <div class="form-group">
+                            <label for="currentPassword">現在のパスワード</label>
+                            <input type="password" id="currentPassword" placeholder="設定済みの場合は入力">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="newPassword">新しいパスワード</label>
+                            <input type="password" id="newPassword" required placeholder="新しいパスワードを入力">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="confirmPassword">パスワード確認</label>
+                            <input type="password" id="confirmPassword" required placeholder="もう一度入力">
+                        </div>
+                        
+                        <button type="submit" class="submit-btn">パスワードを設定</button>
+                    </form>
+                </div>
+
+                <div class="admin-card">
+                    <h3>データ管理</h3>
+                    <p class="admin-description">サイトのデータを管理できます。</p>
+                    
+                    <div class="admin-actions">
+                        <button id="exportData" class="admin-btn export-btn">データをエクスポート</button>
+                        <button id="clearData" class="admin-btn danger-btn">全データを削除</button>
+                    </div>
+                </div>
+
+                <div class="admin-card">
+                    <h3>統計情報</h3>
+                    <div class="admin-stats">
+                        <div class="admin-stat">
+                            <span class="stat-label">記事数:</span>
+                            <span class="stat-value" id="articleCount">0</span>
+                        </div>
+                        <div class="admin-stat">
+                            <span class="stat-label">コメント数:</span>
+                            <span class="stat-value" id="commentCount">0</span>
+                        </div>
+                        <div class="admin-stat">
+                            <span class="stat-label">活動記録数:</span>
+                            <span class="stat-value" id="activityCount">0</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Marathon Journey. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/security.js"></script>
+    <script src="js/admin.js"></script>
+</body>
+</html>
