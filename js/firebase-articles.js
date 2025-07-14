@@ -112,8 +112,7 @@ class FirebaseArticlesManager {
             const newComment = {
                 id: Date.now().toString(),
                 text: commentText,
-                createdAt: new Date().toISOString(),
-                timestamp: this.serverTimestamp()
+                createdAt: new Date().toISOString()
             };
             
             const updatedComments = [...(article.comments || []), newComment];
