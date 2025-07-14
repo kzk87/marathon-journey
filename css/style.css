@@ -17,6 +17,12 @@
     --shadow-light: 0 2px 12px rgba(74, 144, 226, 0.1);
     --shadow-medium: 0 4px 20px rgba(74, 144, 226, 0.15);
     
+    /* Firebase関連カラー */
+    --firebase-orange: #FF6B35;         /* Firebase ブランドカラー */
+    --firebase-yellow: #FFCA28;         /* Firebase アクセント */
+    --success-green: #27AE60;           /* 成功メッセージ */
+    --error-red: #E74C3C;               /* エラーメッセージ */
+    
     /* グラデーション */
     --gradient-primary: linear-gradient(135deg, #4A90E2 0%, #357ABD 100%);
     --gradient-secondary: linear-gradient(135deg, #7ED321 0%, #6BC503 100%);
@@ -916,4 +922,121 @@ body {
         width: 50px;
         height: 50px;
     }
+}
+
+/* =====================================================
+   Firebase関連スタイル
+   ===================================================== */
+
+/* Firebaseライブバッジ */
+.firebase-badge {
+    background: linear-gradient(135deg, var(--firebase-orange), var(--firebase-yellow));
+    color: white;
+    font-size: 0.75rem;
+    font-weight: bold;
+    padding: 4px 8px;
+    border-radius: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    box-shadow: 0 2px 4px rgba(255, 107, 53, 0.3);
+}
+
+/* リアルタイム記事カード */
+.article-card[data-firebase="true"] {
+    border-left: 4px solid var(--firebase-orange);
+    position: relative;
+}
+
+.article-card[data-firebase="true"]::before {
+    content: '';
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 8px;
+    height: 8px;
+    background: var(--firebase-orange);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.2); opacity: 0.7; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+/* コメント投稿中状態 */
+.comment-submit:disabled {
+    background: var(--text-secondary);
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.comment-submit.posting {
+    background: var(--firebase-orange);
+    position: relative;
+}
+
+.comment-submit.posting::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 12px;
+    height: 12px;
+    border: 2px solid white;
+    border-top: 2px solid transparent;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* 成功・エラーメッセージ */
+.message-success {
+    background: linear-gradient(135deg, var(--success-green), #2ECC71);
+    color: white;
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin: 10px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 3px 10px rgba(39, 174, 96, 0.3);
+}
+
+.message-error {
+    background: linear-gradient(135deg, var(--error-red), #C0392B);
+    color: white;
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin: 10px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 3px 10px rgba(231, 76, 60, 0.3);
+}
+
+/* オフライン状態表示 */
+.offline-indicator {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: var(--text-secondary);
+    color: white;
+    text-align: center;
+    padding: 8px;
+    font-size: 0.875rem;
+    z-index: 9999;
+    transform: translateY(-100%);
+    transition: transform 0.3s ease;
+}
+
+.offline-indicator.show {
+    transform: translateY(0);
 }
