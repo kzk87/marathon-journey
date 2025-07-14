@@ -19,3 +19,28 @@ Thumbs.db
 
 # Logs
 *.log
+debug.log
+error.log
+
+# Environment variables & Secrets
+.env
+.env.local
+.env.production
+.env.development
+
+# Firebase設定 (セキュリティ重要)
+firebase-config-local.js
+firebase-config-production.js
+secrets/
+private/
+
+# API Keys & Credentials
+api-keys.json
+credentials.json
+service-account-key.json
+
+# Node.js (将来使用時)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

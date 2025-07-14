@@ -1,9 +1,39 @@
 /**
- * Firebase設定ファイル
+ * Firebase設定ファイル - セキュリティ強化版
  * GitHub Pages用に最適化された設定
  */
 
-// Firebase設定（GitHub Pages対応）
+// ドメイン制限チェック
+const ALLOWED_DOMAINS = [
+    'kzk87.github.io',
+    'localhost'
+];
+
+const ALLOWED_PATHS = [
+    '/marathon-journey'
+];
+
+// セキュリティチェック
+function validateDomain() {
+    const currentDomain = window.location.hostname;
+    const currentPath = window.location.pathname;
+    
+    const isDevelopment = currentDomain === 'localhost';
+    const isAllowedDomain = ALLOWED_DOMAINS.includes(currentDomain);
+    const isAllowedPath = isDevelopment || ALLOWED_PATHS.some(path => currentPath.startsWith(path));
+    
+    if (!isDevelopment && (!isAllowedDomain || !isAllowedPath)) {
+        console.error('🚫 不正なドメインからのアクセス:', currentDomain + currentPath);
+        throw new Error('Unauthorized domain access detected');
+    }
+    
+    console.log('✅ ドメイン認証成功:', currentDomain + currentPath);
+}
+
+// ドメイン認証実行
+validateDomain();
+
+// Firebase設定（セキュリティ強化）
 const firebaseConfig = {
   apiKey: "AIzaSyBu7xGtE9nWnpKcqhFgrdCNIXBkPP0Nalc",
   authDomain: "marathon-journey-eff35.firebaseapp.com",
