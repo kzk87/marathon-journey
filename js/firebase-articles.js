@@ -80,7 +80,7 @@ class FirebaseArticlesManager {
                 title: articleData.title,
                 category: articleData.category,
                 content: articleData.content,
-                createdAt: this.serverTimestamp(),
+                createdAt: new Date().toISOString(),
                 likes: 0,
                 comments: [],
                 authorId: 'admin' // 管理者のみ投稿可能
