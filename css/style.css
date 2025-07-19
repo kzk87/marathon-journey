@@ -1035,3 +1035,21 @@ body {
 .offline-indicator.show {
     transform: translateY(0);
 }
+
+/* 管理者専用バッジ */
+.admin-only-badge {
+    background: linear-gradient(135deg, var(--accent-color), #E8950F);
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 4px 8px;
+    border-radius: 12px;
+    margin-left: 10px;
+    box-shadow: 0 2px 6px rgba(245, 166, 35, 0.3);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}

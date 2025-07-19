@@ -90,9 +90,16 @@ class MarathonTracker {
         }
     }
 
-    // フォーム送信処理
-    handleSubmit(e) {
+    // フォーム送信処理（管理者認証付き）
+    async handleSubmit(e) {
         e.preventDefault();
+        
+        // 管理者認証チェック
+        const isAuthenticated = await AuthManager.checkPassword();
+        if (!isAuthenticated) {
+            alert('活動記録の追加には管理者認証が必要です。');
+            return;
+        }
         
         const formData = {
             id: Date.now(),
@@ -262,10 +269,17 @@ class MarathonTracker {
      */
     
     /**
-     * 活動記録を削除
+     * 活動記録を削除（管理者認証付き）
      * @param {HTMLElement} button - 削除ボタン要素
      */
-    deleteActivity(button) {
+    async deleteActivity(button) {
+        // 管理者認証チェック
+        const isAuthenticated = await AuthManager.checkPassword();
+        if (!isAuthenticated) {
+            alert('活動記録の削除には管理者認証が必要です。');
+            return;
+        }
+        
         const activityId = parseInt(button.dataset.id);
         const activity = this.activities.find(a => a.id === activityId);
         
