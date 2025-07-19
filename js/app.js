@@ -164,7 +164,7 @@ class MarathonTracker {
                 <div class="activity-info">
                     <div class="activity-type">${typeLabel}</div>
                     <div class="activity-details">
-                        ${activity.duration ? `時間: ${activity.duration}` : ''}
+                        ${activity.duration ? `時間: ${activity.duration}分` : ''}
                         ${pace ? ` | ペース: ${pace}` : ''}
                         ${activity.notes ? ` | ${activity.notes}` : ''}
                     </div>
@@ -185,18 +185,11 @@ class MarathonTracker {
         return date.toLocaleDateString('ja-JP', options);
     }
 
-    calculatePace(distance, timeStr) {
-        if (!timeStr || !distance) return null;
+    calculatePace(distance, timeMinutes) {
+        if (!timeMinutes || !distance) return null;
         
-        const timeParts = timeStr.split(':');
-        let totalMinutes = 0;
-        
-        if (timeParts.length === 2) {
-            totalMinutes = parseInt(timeParts[0]) + parseInt(timeParts[1]) / 60;
-        } else if (timeParts.length === 3) {
-            totalMinutes = parseInt(timeParts[0]) * 60 + parseInt(timeParts[1]) + parseInt(timeParts[2]) / 60;
-        }
-        
+        // 分単位の数値として処理
+        const totalMinutes = parseInt(timeMinutes);
         const paceMinutes = totalMinutes / distance;
         const minutes = Math.floor(paceMinutes);
         const seconds = Math.round((paceMinutes - minutes) * 60);
@@ -247,18 +240,11 @@ class MarathonTracker {
         document.getElementById('averagePace').textContent = averagePace;
     }
 
-    calculatePaceInMinutes(distance, timeStr) {
-        if (!timeStr || !distance) return 0;
+    calculatePaceInMinutes(distance, timeMinutes) {
+        if (!timeMinutes || !distance) return 0;
         
-        const timeParts = timeStr.split(':');
-        let totalMinutes = 0;
-        
-        if (timeParts.length === 2) {
-            totalMinutes = parseInt(timeParts[0]) + parseInt(timeParts[1]) / 60;
-        } else if (timeParts.length === 3) {
-            totalMinutes = parseInt(timeParts[0]) * 60 + parseInt(timeParts[1]) + parseInt(timeParts[2]) / 60;
-        }
-        
+        // 分単位の数値として処理
+        const totalMinutes = parseInt(timeMinutes);
         return totalMinutes / distance;
     }
 
