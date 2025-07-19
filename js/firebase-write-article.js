@@ -22,18 +22,16 @@ class FirebaseArticleWriter {
             const firebase = await window.initializeFirebase();
             this.db = firebase.db;
             
-            // Firestore関数を動的インポート
-            const firestoreFunctions = await import('https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js');
-            this.collection = firestoreFunctions.collection;
-            this.addDoc = firestoreFunctions.addDoc;
-            this.serverTimestamp = firestoreFunctions.serverTimestamp;
+            // Firestore関数を動的インポート（共通化）
+            const { collection, addDoc } = await import('https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js');
+            this.collection = collection;
+            this.addDoc = addDoc;
             
             console.log('✅ Firebase記事投稿システム初期化完了');
             this.setupEventListeners();
             
         } catch (error) {
             console.error('❌ Firebase初期化エラー:', error);
-            // フォールバック: 従来のJSON方式
             this.setupEventListeners();
         }
     }
@@ -78,13 +76,7 @@ class FirebaseArticleWriter {
         submitBtn.disabled = true;
 
         try {
-            if (this.db) {
-                // Firebase投稿
-                await this.saveToFirebase(title, category, content);
-            } else {
-                // フォールバック: JSON投稿
-                await this.saveToJSON(title, category, content);
-            }
+            await this.saveToFirebase(title, category, content);
         } catch (error) {
             console.error('投稿エラー:', error);
             alert('記事の投稿に失敗しました。もう一度お試しください。');

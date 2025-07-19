@@ -14,8 +14,9 @@
 - **📱 レスポンシブ対応**: スマホ・タブレット最適化
 
 ### 🛡️ セキュリティ機能
+- **デバイス認証**: ネットワーク非依存の管理者認証システム
 - **XSS攻撃防止**: 入力値検証・HTMLエスケープ
-- **セッション管理**: ブラウザフィンガープリント認証
+- **セッション管理**: 複数デバイス対応セキュア認証
 - **アクセス制限**: 管理者ページ保護
 - **セキュリティヘッダー**: CSP、XSS防止設定
 
@@ -51,11 +52,13 @@ marathon-blog/
 │   ├── firebase-config.js  # Firebase設定
 │   ├── firebase-articles.js # Firebase記事管理
 │   ├── firebase-write-article.js # Firebase記事投稿
+│   ├── device-auth.js     # デバイス認証システム
 │   ├── security.js        # セキュリティ管理
 │   ├── session-invalidator.js # セッション無効化
 │   ├── admin-guard.js     # 管理者アクセス制御
 │   ├── admin.js          # 管理者機能
-│   └── auth.js           # 認証システム
+│   ├── auth.js           # 認証システム
+│   └── articles-init.js   # 記事初期化
 ├── data/
 │   └── articles.json     # 記事データ（フォールバック用）
 ├── backup-legacy/        # 旧ファイルバックアップ
@@ -88,8 +91,8 @@ cd marathon-journey
 ## 📖 使用方法
 
 ### 記事投稿
-1. 管理者ページでパスワード設定
-2. 記事投稿ページでコンテンツ作成
+1. 管理者ページでパスワード設定（デバイス自動登録）
+2. どの回線からでも記事投稿ページでコンテンツ作成
 3. Firebase経由で即座に全世界公開
 
 ### 活動記録
@@ -170,4 +173,4 @@ MIT License - 自由に使用・改変可能
 
 **作成者**: [@kzk87](https://github.com/kzk87)  
 **サイトURL**: https://kzk87.github.io/marathon-journey/  
-**最終更新**: 2025年7月14日
+**最終更新**: 2025年7月19日
