@@ -120,7 +120,7 @@ class FirebaseDebugger {
     }
 }
 
-// デバッグツールを起動
-document.addEventListener('DOMContentLoaded', () => {
-    new FirebaseDebugger();
-});
+// デバッグツールを起動（本番環境では無効化）
+// document.addEventListener('DOMContentLoaded', () => {
+//     new FirebaseDebugger();
+// });

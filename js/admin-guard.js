@@ -1,9 +1,10 @@
 /**
- * 管理者ページアクセス制御
+ * 管理者ページアクセス制御 - デバイス認証対応
  */
 class AdminGuard {
     constructor() {
         this.securityManager = new SecurityManager();
+        this.deviceAuth = new DeviceAuthManager();
         this.init();
     }
 
@@ -12,6 +13,15 @@ class AdminGuard {
     }
 
     checkAdminAccess() {
+        // デバイス認証チェック（ネットワーク非依存）
+        if (this.deviceAuth.isCurrentDeviceRegistered()) {
+            console.log('✅ 登録済みデバイスからのアクセス');
+            this.securityManager.initializeMasterAdmin();
+            this.showDeviceAuthMessage();
+            return;
+        }
+        
+        // 従来のアクセス制御（初期設定用）
         const accessCheck = this.securityManager.validateAdminAccess();
         
         if (!accessCheck.allowed) {
@@ -101,6 +111,36 @@ class AdminGuard {
         banner.innerHTML = `
             <div style="font-size: 14px; font-weight: bold;">
                 ✅ あなたが管理者として認証されました - このブラウザでのみ管理機能が利用可能です
+            </div>
+        `;
+        document.body.appendChild(banner);
+
+        // 5秒後にバナーを削除
+        setTimeout(() => {
+            if (banner.parentNode) {
+                banner.parentNode.removeChild(banner);
+            }
+        }, 5000);
+    }
+
+    showDeviceAuthMessage() {
+        const banner = document.createElement('div');
+        banner.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(90deg, #3498db, #2980b9);
+            color: white;
+            padding: 15px;
+            text-align: center;
+            z-index: 10000;
+            font-family: 'Noto Sans JP', sans-serif;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        `;
+        banner.innerHTML = `
+            <div style="font-size: 14px; font-weight: bold;">
+                🔐 登録済みデバイスとして認証 - どの回線からでもアクセス可能です
             </div>
         `;
         document.body.appendChild(banner);

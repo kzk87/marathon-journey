@@ -1,6 +1,7 @@
 class AdminManager {
     constructor() {
         this.security = new SecurityManager();
+        this.deviceAuth = new DeviceAuthManager();
         this.init();
     }
 
@@ -56,10 +57,16 @@ class AdminManager {
         localStorage.setItem('adminPassword', newPassword); // 元のパスワードも保存（認証用）
         localStorage.setItem('adminPasswordHash', hashedPassword);
         
-        // セッションを生成
+        // デバイス認証を登録（ネットワーク非依存）
+        const deviceResult = await this.deviceAuth.registerAdminDevice(newPassword);
+        if (deviceResult.success) {
+            console.log('✅ デバイス認証登録完了 - どの回線からでもアクセス可能になりました');
+        }
+        
+        // 従来のセッションも生成（互換性維持）
         await this.security.saveSession(newPassword);
         
-        alert('パスワードが設定されました！');
+        alert('パスワードが設定されました！\nこのデバイスはどの回線からでも管理者としてアクセス可能になりました。');
         document.getElementById('passwordForm').reset();
     }
 

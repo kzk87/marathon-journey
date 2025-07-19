@@ -1,8 +1,21 @@
 class AuthManager {
     static async checkPassword() {
+        const deviceAuth = new DeviceAuthManager();
         const security = new SecurityManager();
         
-        // まずセッションをチェック
+        // デバイス認証をまずチェック
+        if (deviceAuth.isCurrentDeviceRegistered()) {
+            const adminPassword = localStorage.getItem('adminPassword');
+            if (adminPassword) {
+                const authResult = await deviceAuth.checkDeviceAuth(adminPassword);
+                if (authResult.valid) {
+                    console.log('✅ デバイス認証済み:', authResult.deviceName);
+                    return true;
+                }
+            }
+        }
+        
+        // 従来のセッションチェック（互換性維持）
         const sessionCheck = await security.checkSession();
         if (sessionCheck.valid) {
             return true;
@@ -24,11 +37,11 @@ class AuthManager {
         }
         
         return new Promise((resolve) => {
-            this.showPasswordModal(adminPassword, resolve, security);
+            this.showPasswordModal(adminPassword, resolve, security, deviceAuth);
         });
     }
     
-    static showPasswordModal(correctPassword, callback, security) {
+    static showPasswordModal(correctPassword, callback, security, deviceAuth) {
         const overlay = document.createElement('div');
         overlay.className = 'auth-overlay';
         overlay.innerHTML = `
@@ -61,7 +74,15 @@ class AuthManager {
             const password = document.getElementById('authPassword').value;
             
             if (password === correctPassword) {
-                // セッションを保存
+                // デバイス認証を登録
+                if (deviceAuth) {
+                    const registerResult = await deviceAuth.registerAdminDevice(password);
+                    if (registerResult.success) {
+                        console.log('✅ デバイス登録完了 - どの回線からでもアクセス可能になりました');
+                    }
+                }
+                
+                // 従来のセッションも保存（互換性維持）
                 await security.saveSession(password);
                 security.resetFailedAttempts();
                 
