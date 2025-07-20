@@ -79,7 +79,7 @@ class FirebaseArticleWriter {
             await this.saveToFirebase(title, category, content);
         } catch (error) {
             console.error('投稿エラー:', error);
-            alert('記事の投稿に失敗しました。もう一度お試しください。');
+            alert(`記事の投稿に失敗しました。\nエラー: ${error.message}\nもう一度お試しください。`);
         } finally {
             submitBtn.textContent = originalText;
             submitBtn.disabled = false;
@@ -90,6 +90,10 @@ class FirebaseArticleWriter {
      * Firebaseに記事を保存
      */
     async saveToFirebase(title, category, content) {
+        if (!this.db) {
+            throw new Error('Firebase データベースが初期化されていません');
+        }
+        
         try {
             const articlesRef = this.collection(this.db, 'articles');
             
@@ -97,7 +101,7 @@ class FirebaseArticleWriter {
                 title: this.escapeHtml(title),
                 category: category,
                 content: this.escapeHtml(content),
-                createdAt: this.serverTimestamp(),
+                createdAt: new Date().toISOString(),
                 likes: 0,
                 comments: [],
                 authorId: 'admin'
