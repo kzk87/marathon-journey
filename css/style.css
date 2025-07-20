@@ -1053,3 +1053,38 @@ body {
     0%, 100% { opacity: 1; }
     50% { opacity: 0.7; }
 }
+
+/* 続きを読むボタンと記事表示制御 */
+.content-text.collapsed {
+    max-height: none;
+    overflow: visible;
+}
+
+.content-text.expanded {
+    max-height: none;
+    overflow: visible;
+}
+
+.read-more-btn {
+    background: linear-gradient(135deg, var(--primary-color), #357ABD);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    margin-top: 12px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(74, 144, 226, 0.2);
+}
+
+.read-more-btn:hover {
+    background: linear-gradient(135deg, #357ABD, #2C5282);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
+}
+
+.read-more-btn:active {
+    transform: translateY(0);
+}

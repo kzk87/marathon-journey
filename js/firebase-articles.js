@@ -222,6 +222,8 @@ class FirebaseArticlesManager {
         const categoryLabel = categoryLabels[article.category] || article.category;
         const preview = this.createPreview(article.content, 200);
         const isLiked = localStorage.getItem(`liked_${article.id}`) === 'true';
+        const isExpanded = localStorage.getItem(`expanded_${article.id}`) === 'true';
+        const shouldShowReadMore = article.content.length > 200;
 
         return `
             <article class="article-card" data-id="${article.id}">
@@ -234,7 +236,12 @@ class FirebaseArticlesManager {
                 </div>
                 
                 <h3 class="article-title">${this.escapeHtml(article.title)}</h3>
-                <div class="article-content">${this.escapeHtml(preview)}</div>
+                <div class="article-content" data-id="${article.id}">
+                    <div class="content-text ${isExpanded ? 'expanded' : 'collapsed'}">
+                        ${this.escapeHtml(isExpanded ? article.content : preview)}
+                    </div>
+                    ${shouldShowReadMore ? `<button class="read-more-btn" data-id="${article.id}">${isExpanded ? '折りたたむ' : '続きを読む'}</button>` : ''}
+                </div>
                 
                 <div class="article-actions">
                     <div class="article-stats">
@@ -292,6 +299,34 @@ class FirebaseArticlesManager {
                 await this.addComment(articleId, commentText);
                 textarea.value = '';
             }
+            
+        } else if (e.target.classList.contains('read-more-btn')) {
+            const articleId = e.target.dataset.id;
+            this.toggleReadMore(articleId);
+        }
+    }
+
+    /**
+     * 続きを読む/折りたたむ切り替え
+     */
+    toggleReadMore(articleId) {
+        const article = this.articles.find(a => a.id === articleId);
+        if (!article) return;
+        
+        const isExpanded = localStorage.getItem(`expanded_${articleId}`) === 'true';
+        const newState = !isExpanded;
+        
+        // 状態を保存
+        localStorage.setItem(`expanded_${articleId}`, newState.toString());
+        
+        // DOM更新
+        const contentDiv = document.querySelector(`.article-content[data-id="${articleId}"] .content-text`);
+        const button = document.querySelector(`.read-more-btn[data-id="${articleId}"]`);
+        
+        if (contentDiv && button) {
+            contentDiv.className = `content-text ${newState ? 'expanded' : 'collapsed'}`;
+            contentDiv.innerHTML = this.escapeHtml(newState ? article.content : this.createPreview(article.content, 200));
+            button.textContent = newState ? '折りたたむ' : '続きを読む';
         }
     }
 
