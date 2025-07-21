@@ -202,6 +202,42 @@ class FirebaseArticlesManager {
         
         // イベントリスナーを設定
         this.setupEventListeners();
+        
+        // 管理者認証チェックして削除ボタン表示
+        this.checkAdminAndShowDeleteButtons();
+    }
+
+    /**
+     * 管理者認証チェックして削除ボタン表示
+     */
+    async checkAdminAndShowDeleteButtons() {
+        try {
+            // デバイス認証チェック（パスワード入力なし）
+            const deviceAuth = new DeviceAuthManager();
+            if (deviceAuth.isCurrentDeviceRegistered()) {
+                this.showDeleteButtons();
+                return;
+            }
+            
+            // 従来のセッションチェック
+            const security = new SecurityManager();
+            const sessionCheck = await security.checkSession();
+            if (sessionCheck.valid) {
+                this.showDeleteButtons();
+            }
+        } catch (error) {
+            console.log('管理者認証なし - 削除ボタン非表示');
+        }
+    }
+
+    /**
+     * 削除ボタンを表示
+     */
+    showDeleteButtons() {
+        const adminActions = document.querySelectorAll('.admin-actions');
+        adminActions.forEach(action => {
+            action.style.display = 'flex';
+        });
     }
 
     /**
@@ -254,6 +290,9 @@ class FirebaseArticlesManager {
                             <span>${(article.comments || []).length}</span>
                         </button>
                     </div>
+                    <div class="admin-actions" style="display: none;">
+                        <button class="delete-article-btn" data-id="${article.id}" title="記事を削除">🗑️</button>
+                    </div>
                 </div>
                 
                 <div class="comments-section" id="comments-${article.id}">
@@ -303,6 +342,10 @@ class FirebaseArticlesManager {
         } else if (e.target.classList.contains('read-more-btn')) {
             const articleId = e.target.dataset.id;
             this.toggleReadMore(articleId);
+            
+        } else if (e.target.classList.contains('delete-article-btn')) {
+            const articleId = e.target.dataset.id;
+            await this.deleteArticle(articleId);
         }
     }
 
@@ -327,6 +370,50 @@ class FirebaseArticlesManager {
             contentDiv.className = `content-text ${newState ? 'expanded' : 'collapsed'}`;
             contentDiv.innerHTML = this.escapeHtml(newState ? article.content : this.createPreview(article.content, 200));
             button.textContent = newState ? '折りたたむ' : '続きを読む';
+        }
+    }
+
+    /**
+     * 記事を削除（管理者認証付き）
+     */
+    async deleteArticle(articleId) {
+        try {
+            // 管理者認証チェック
+            const isAuthenticated = await AuthManager.checkPassword();
+            if (!isAuthenticated) {
+                alert('記事の削除には管理者認証が必要です。');
+                return;
+            }
+
+            const article = this.articles.find(a => a.id === articleId);
+            if (!article) {
+                alert('記事が見つかりません。');
+                return;
+            }
+
+            // 削除確認
+            const confirmDelete = confirm(`記事「${article.title}」を削除しますか？\nこの操作は取り消せません。`);
+            if (!confirmDelete) return;
+
+            // Firebaseから削除
+            if (this.db) {
+                const { doc, deleteDoc } = await import('https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js');
+                const articleRef = doc(this.db, 'articles', articleId);
+                await deleteDoc(articleRef);
+                console.log('✅ Firebase記事削除完了:', articleId);
+            }
+
+            // ローカル配列からも削除
+            this.articles = this.articles.filter(a => a.id !== articleId);
+            
+            // 記事表示を更新
+            this.displayArticles();
+            
+            alert('記事が削除されました。');
+
+        } catch (error) {
+            console.error('❌ 記事削除エラー:', error);
+            alert(`記事の削除に失敗しました。\nエラー: ${error.message}`);
         }
     }
 

@@ -1088,3 +1088,38 @@ body {
 .read-more-btn:active {
     transform: translateY(0);
 }
+
+/* 記事削除ボタン（管理者専用） */
+.admin-actions {
+    display: none;
+    align-items: center;
+    gap: 8px;
+}
+
+.delete-article-btn {
+    background: linear-gradient(135deg, var(--error-red), #C0392B);
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(231, 76, 60, 0.2);
+}
+
+.delete-article-btn:hover {
+    background: linear-gradient(135deg, #C0392B, #A93226);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+}
+
+.delete-article-btn:active {
+    transform: translateY(0);
+}
+
+.article-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
